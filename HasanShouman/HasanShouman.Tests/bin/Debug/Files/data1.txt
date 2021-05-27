@@ -1,0 +1,14 @@
+﻿1>25/05/2021 5:00 pm>e>Bob enters the room
+2>25/05/2021 5:05 pm>e>Kate enters the room
+1>25/05/2021 6:15 pm>c>Hey, Kate - high five?
+2>25/05/2021 6:17 pm>h>Kate high-fives Bob
+2>25/05/2021 6:18 pm>h>Kate high-fives Hasan
+2>25/05/2021 6:19 pm>h>Kate high-fives Alison
+1>25/05/2021 6:20 pm>h>Bob high-fives Kate
+1>25/05/2021 7:18 pm>l>Bob leaves
+2>25/05/2021 7:20 pm>c>Kate comments: Oh, typical
+2>25/05/2021 7:21 pm>l>Kate leaves
+2>25/05/2021 8:17 pm>h>Kate high-fives Bob
+1>25/05/2021 8:18 pm>h>Bob high-fives Hasan
+2>25/05/2021 9:19 pm>h>Kate high-fives Alison
+1>25/05/2021 10:20 pm>h>Bob high-fives Kate

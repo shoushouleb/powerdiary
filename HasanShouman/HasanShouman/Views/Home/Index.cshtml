@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<select id="cmbGranularity" onchange="getData()">
+    <option value="">*Select Granularity*</option>
+    <option value="m">Minute by Minute</option>
+    <option value="h">Hourly</option>
+</select>
+<br/>
+
+<div class="container">
+
+    <ul id="ulData"> <!-- List to show the data returned from the server-->
+
+    </ul>
+</div>
+
+<script>
+
+ /*
+ * Calls the server, and get the data base on the selected option.
+ */
+    function getData() {
+        // Get the selected grouping type.
+        var selectedValue = $('#cmbGranularity').find(":selected").val();
+
+        // Remove the list.
+        if ($("ul"))
+            $("ul").remove();
+
+        // Call the server
+        $.ajax({
+            type: "post",
+            url: "@Url.Action("LoadData", "Home")",
+            data: { Granularity: selectedValue },
+            success: function (data) {
+
+                data = JSON.parse(data);
+                // Check the key of the data returned, if success then fill the list, else show the error.
+                if (data.Key == "Success") {
+
+
+                    var container = document.getElementsByClassName('container')[0];
+                    if (selectedValue == "h") {
+
+                        showGroupedData(container, data.Data);
+                    }
+                    else if (selectedValue == "m") {
+                        showUngroupedData(container, data.Data)
+                    }
+                }
+                else {
+                    alert(data.Message);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    }
+
+/*
+* A recursive function to Fill the data that is grouped.
+*/
+    function showGroupedData(container, args) {
+
+
+        var ul = document.createElement('ul');
+
+        for (var j = 0; j < args.length; j++) {
+            var row = args[j];
+
+            var li = document.createElement('li');
+
+            // If the children field is null, then this is a child and not a parent.
+            if (row.Children == null) {
+
+                if (row.EventType == "c") {
+                    li.innerText = row.CountSender + " person(s) commented.";
+                }
+                if (row.EventType == "e") {
+                    li.innerText = row.CountSender + " person(s) entered.";
+                }
+                if (row.EventType == "l") {
+                    li.innerText = row.CountSender + " person(s) left.";
+                }
+                if (row.EventType == "h") {
+                    li.innerText = row.CountSender + " person(s) high-fived " + row.CountReceiver + " other persons(s)";
+                }
+            }
+
+            else
+                li.innerText = row.EventDate;
+            
+
+            var nodes = row.Children;
+            if (nodes && nodes.length) {
+                showGroupedData(li, nodes);
+            }
+
+            ul.appendChild(li);
+        }
+
+        container.appendChild(ul);
+    };
+
+/*
+* Fill the data that is not-grouped.
+*/
+    function showUngroupedData(container,data)
+    {
+
+        var ul = document.createElement('ul');
+
+        for (var j = 0; j < data.length; j++) {
+            var row = data[j];
+
+            var li = document.createElement('li');
+
+                li.innerText = row.EventDate + " => " + row.Description;
+
+
+            ul.appendChild(li);
+        }
+
+        container.appendChild(ul);
+    }
+</script>
